@@ -4,7 +4,7 @@ import { Client as bitcoinClient, ClientUrl } from '@xchainjs/xchain-bitcoin';
 import { Client as thorchainClient, getChainIds, getDefaultClientUrl, ChainIds } from '@xchainjs/xchain-thorchain'
 import { Client as litecoinClient } from '@xchainjs/xchain-litecoin';
 import { Client as bitcoinCashClient } from '@xchainjs/xchain-bitcoincash';
-import { Client as ethereumClient,  } from '@xchainjs/xchain-ethereum/lib';
+import { Client as ethereumClient,  } from '@xchainjs/xchain-ethereum';
 import { Client as dogeClient } from '@xchainjs/xchain-doge';
 import { Client as terraClient } from '@xchainjs/xchain-terra';
 import { generatePhrase, validatePhrase} from "@xchainjs/xchain-crypto";
@@ -26,7 +26,7 @@ export class MockService {
   mockTerraClient: terraClient;
 
   //These phrases are valid because it was made on thorswap
-  
+
   //Mainnet Phrase
   MAINNET_MOCK_PHRASE =
   'spin grass foot panel express mule marble garment number label share cushion';
@@ -34,7 +34,7 @@ export class MockService {
   //Testnet Phrase
   TESTNET_MOCK_PHRASE =
   'injury hundred identify tonight fit diesel physical bundle rain equip crumble donor';
-  
+
 
   constructor() {
 
@@ -104,7 +104,7 @@ export class MockService {
     this.mockBchClient = new bitcoinCashClient({ network, phrase });
    console.log(this.mockBchClient.getAddress());
   }
-  
+
   public async initDogecoinClient(network: Network,phrase: string){
     this.mockDogeClient = new dogeClient({ network, phrase });
    console.log(this.mockDogeClient.getAddress());
