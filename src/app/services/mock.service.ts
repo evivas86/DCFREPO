@@ -25,35 +25,19 @@ export class MockService {
   mockDogeClient: dogeClient;
   mockTerraClient: terraClient;
 
-  //These phrases are valid because it was made on thorswap
-
-  //Mainnet Phrase
-  MAINNET_MOCK_PHRASE =
-  'spin grass foot panel express mule marble garment number label share cushion';
-
-  //Testnet Phrase
-  TESTNET_MOCK_PHRASE =
-  'injury hundred identify tonight fit diesel physical bundle rain equip crumble donor';
-
 
   constructor() {
 
-    const network = environment.production === false ? Network.Testnet : Network.Mainnet;
-    //const network = Network.Mainnet;
-
-    const phrase = environment.production === false ? this.TESTNET_MOCK_PHRASE : this.MAINNET_MOCK_PHRASE;
-    //const phrase = this.MAINNET_MOCK_PHRASE;
-
     //None of these clients can be initialized because throws the Invalid Phrase Error on browser
 
-    this.initThorchainClient(network,phrase);
-    this.initBinanceClient(network,phrase);
-    this.initBitcoinClient(network,phrase);
-    this.initBitcoincashClient(network,phrase);
-    this.initDogecoinClient(network,phrase);
-    this.initEthereumClient(network,phrase);
-    this.initLitecoinClient(network,phrase);
-    this.initTerraClient(network,phrase);
+    // this.initThorchainClient(network,phrase);
+    // this.initBinanceClient(network,phrase);
+    // this.initBitcoinClient(network,phrase);
+    // this.initBitcoincashClient(network,phrase);
+    // this.initDogecoinClient(network,phrase);
+    // this.initEthereumClient(network,phrase);
+    // this.initLitecoinClient(network,phrase);
+    // this.initTerraClient(network,phrase);
 
   }
 
@@ -69,7 +53,6 @@ export class MockService {
       phrase,
       chainIds,
     });
-   console.log(this.mockThorchainClient.getAddress());
   }
 
   public async setChainIds(): Promise<ChainIds>{
@@ -100,14 +83,12 @@ export class MockService {
    console.log(this.mockBtcClient.getAddress());
   }
 
-  public async initBitcoincashClient(network: Network,phrase: string){
+  public async initBitcoincashClient(network: Network, phrase: string) {
     this.mockBchClient = new bitcoinCashClient({ network, phrase });
-   console.log(this.mockBchClient.getAddress());
   }
 
   public async initDogecoinClient(network: Network,phrase: string){
     this.mockDogeClient = new dogeClient({ network, phrase });
-   console.log(this.mockDogeClient.getAddress());
   }
 
   public async initLitecoinClient(network: Network,phrase: string){
