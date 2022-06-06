@@ -2,8 +2,15 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// export const environment = {
+//   production: false,
+//   thornode_endpoint: 'https://testnet.thornode.thorchain.info/thorchain/',
+//   etherscanKey: process.env.ETHERSCAN_KEY,
+//   infuraProjectId: process.env.INFURA_PROJET_ID,
+// };
 export const environment = {
-  production: false,
+  production: true,
+  thornode_endpoint: 'https://thornode.ninerealms.com/thorchain/',
   etherscanKey: process.env.ETHERSCAN_KEY,
   infuraProjectId: process.env.INFURA_PROJET_ID,
 };

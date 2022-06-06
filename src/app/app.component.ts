@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MockService } from "./services/mock.service";
+import { MockService, PoolAddressDTO } from "./services/mock.service";
 import { environment } from "src/environments/environment";
 import { Network} from "@xchainjs/xchain-client";
 import {
@@ -40,6 +40,7 @@ export class AppComponent implements OnInit {
 
   phrase = environment.production === false ? this.TESTNET_MOCK_PHRASE : this.MAINNET_MOCK_PHRASE;
   amount: number = 0;
+  addressUrl: string = "";
   //const phrase = this.MAINNET_MOCK_PHRASE;
 
   constructor(private mockService: MockService) {
@@ -57,6 +58,7 @@ export class AppComponent implements OnInit {
     await this.mockService.initBitcoincashClient(this.network, this.phrase);
     await this.mockService.initThorchainClient(this.network, this.phrase);
     this.address = this.mockService.mockBchClient.getAddress();
+    this.addressUrl = this.mockService.mockBchClient.getExplorerAddressUrl(this.address);
     this.targetAddress = this.mockService.mockThorchainClient.getAddress();
     this.step = this.address.length > 0 ? 1 : 0;
     let arrBalance = await this.mockService.mockBchClient.getBalance(this.address);
@@ -65,6 +67,10 @@ export class AppComponent implements OnInit {
 
   async swap() {
     let asset = AssetBCH;
+    const currentPools = await this.mockService.getInboundAddresses().toPromise() as PoolAddressDTO[];
+    const matchingPool = currentPools.filter(
+            (pool) => pool.chain === asset.chain
+          )[0];
     const floor = this.getSlipLimitFromAmount(this.amount);
     let sliplimit = Math.floor(floor.toNumber());
     let tag = 345;
@@ -72,20 +78,33 @@ export class AppComponent implements OnInit {
     let memo = `=:THOR.RUNE:${this.targetAddress}:${taggedSlip}`;
     if (this.balance > 0) {
 
-      if (this.amount > 0 && this.amount < this.balance) {
+      if (this.amount > 0 && this.amount < this.balance && currentPools != undefined) {
         this.step = 2;
-        let tx_amount = assetToBase(assetAmount(this.amount));
         try {
           console.log({
-            amount: tx_amount.amount().toNumber(),
-            memo,
-            asset: asset
+          amount: assetToBase(assetAmount(this.amount)).amount().toNumber(),
+          recipient: matchingPool.address,
+          memo,
+          asset,
           });
-          const hash = await this.mockService.mockBchClient.deposit({
-            amount: assetToBase(assetAmount(this.amount)),
-            memo,
-            asset: asset
+          // console.log({
+          //   amount: amount.amount().toNumber(),
+          //   memo,
+          //   asset
+          // });
+          // const hash = await this.mockService.mockBchClient.deposit({
+          //   amount: assetToBase(assetAmount(this.amount)),
+          //   memo,
+          //   asset
+          // });
+
+          const hash = await this.mockService.mockBchClient.transfer({
+          amount: assetToBase(assetAmount(this.amount)),
+          recipient: matchingPool.address,
+          memo,
+          asset,
           });
+
           this.hash = hash;
           this.explorerURL = this.mockService.mockThorchainClient.getExplorerTxUrl(hash);
           console.log(this.mockService.mockBchClient.getExplorerTxUrl(hash), this.explorerURL);
